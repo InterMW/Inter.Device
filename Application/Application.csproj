@@ -2,13 +2,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Device.Grpc\Device.Grpc.csproj" />
-    <IsPackable>false</IsPackable>
   </ItemGroup>
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
 </Project>
