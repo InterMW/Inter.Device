@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Device.Grpc\Device.Grpc.csproj" />
+    <IsPackable>false</IsPackable>
   </ItemGroup>
 
   <PropertyGroup>
