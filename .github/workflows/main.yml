@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-push-package:
+  push-package:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -16,17 +16,13 @@ jobs:
         dotnet-version: 8.0.x
     - name: Restore dependencies
       run: dotnet restore
-    - name: Setup env
-      uses: jwulf/add-env-vars-action@master
-      with:
-        map: '{"vers": "8.0.${{ github.run_number }}</Version"}'
     - name: show
       run: echo $vers
     - name: Find and Replace
       uses: jacobtomlinson/gha-find-replace@master
       with:
         find: \d*\.\d*\.(\d*)\</Version
-        replace: ${{env.vers}}
+        replace: 8.0.${{ github.run_number }}</Version
     - name: Prepare
       run: mkdir output
     - name: Pack 
@@ -34,6 +30,7 @@ jobs:
     - name: Push
       run: nuget push **\*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}}
   build-publish:
+    needs: push-package
     runs-on: ubuntu-latest
     env:
       DOCKERFILE: Dockerfile
