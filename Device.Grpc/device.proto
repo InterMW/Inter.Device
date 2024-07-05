@@ -4,12 +4,23 @@ package device;
 
 service DeviceService {
   rpc SetAliveState (DeviceStateMessage) returns (Empty);
+  rpc CreateDevice (DeviceCreateMessage) returns (DeviceDto);
+  rpc GetDevice (DeviceRequestMessage) returns (DeviceDto);
   rpc GetDevices (Empty) returns (stream DeviceDto);
 }
 
 message DeviceDto {
   string serial = 1;
   bool is_online = 2;
+}
+
+message DeviceCreateMessage {
+    string serial = 1;
+}
+
+message DeviceRequestMessage {
+  string serial = 1;
+  bool create = 2;
 }
 
 message DeviceStateMessage {

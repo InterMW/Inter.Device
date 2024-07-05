@@ -5,6 +5,7 @@ namespace Infrastructure.RepositoryCore;
 
 public interface IDeviceRepository
 {
+    Task CreateDeviceAsync(DeviceModel model);
     Task SetDeviceAsync(DeviceModel model);
     Task<DeviceModel> GetDeviceAsync(string serialNumber);
     IAsyncEnumerable<DeviceModel> GetDevicesAsync([EnumeratorCancellation] CancellationToken ct);

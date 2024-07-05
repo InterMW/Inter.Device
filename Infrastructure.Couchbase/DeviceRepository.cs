@@ -14,7 +14,7 @@ public class DeviceRepository : BaseRepository, IDeviceRepository
 
     public async IAsyncEnumerable<DeviceModel> GetDevicesAsync([EnumeratorCancellation] CancellationToken ct)
     {
-        await foreach(var device in Collection.ScanAsync(new RangeScan()))
+        await foreach (var device in Collection.ScanAsync(new RangeScan()))
         {
             yield return device.ContentAs<DeviceModel>();
         };
@@ -24,5 +24,8 @@ public class DeviceRepository : BaseRepository, IDeviceRepository
         (await Collection.GetAsync(serialNumber)).ContentAs<DeviceModel>();
 
     public Task SetDeviceAsync(DeviceModel model) =>
-        Collection.UpsertAsync(model.SerialNumber,model);
+        Collection.UpsertAsync(model.SerialNumber, model);
+
+    public Task CreateDeviceAsync(DeviceModel model) =>
+        Collection.InsertAsync(model.SerialNumber, model);
 }
