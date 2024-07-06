@@ -15,7 +15,7 @@ public class DeviceGrpcServer : DeviceService.DeviceServiceBase
 
     public override async Task<DeviceDto> GetDevice(DeviceRequestMessage request, ServerCallContext context)
     {
-        var result = await _domainService.GetDeviceAsync(request.Serial, request.Create);
+        var result = await _domainService.GetDeviceAsync(request.Serial);
         return result.ToDto();
     }
 
@@ -35,6 +35,13 @@ public class DeviceGrpcServer : DeviceService.DeviceServiceBase
 
         return new Empty();
     }
+
+    public override async Task<DeviceDto> CreateDevice(DeviceCreateMessage request, ServerCallContext context)
+    {
+        await _domainService.CreateDeviceAsync(request.Serial);
+
+        retur
+    }
     // The following are defined becuase I use the "generate overrides"
     // function to fill out the generated stuff
     public override string? ToString() => base.ToString();
@@ -43,8 +50,4 @@ public class DeviceGrpcServer : DeviceService.DeviceServiceBase
     
     public override int GetHashCode() => base.GetHashCode();
 
-    public override Task<DeviceDto> CreateDevice(DeviceCreateMessage request, ServerCallContext context)
-    {
-        return base.CreateDevice(request, context);
-    }
 }

@@ -5,9 +5,10 @@ namespace DomainService;
 
 public interface IDeviceDomainService
 {
-    Task<DeviceModel> GetDeviceAsync(string serialNumber, bool create);
+    Task<DeviceModel> GetDeviceAsync(string serialNumber);
     IAsyncEnumerable<DeviceModel> GetDevicesAsync(CancellationToken ct);
     Task SetOnlineState(string serialNumber, bool state);
+    Task<DeviceModel> CreateDeviceAsync(string serialNumber);
 }
 
 public class DeviceDomainService : IDeviceDomainService
@@ -18,21 +19,12 @@ public class DeviceDomainService : IDeviceDomainService
     {
         _repository = repository;
     }
-    public Task CreateDeviceAsync(string serialNumber) =>
+    public Task<DeviceModel> CreateDeviceAsync(string serialNumber) =>
         _repository.CreateDeviceAsync(new DeviceModel()
         { IsOnline = false, SerialNumber = serialNumber });
 
-    public async Task<DeviceModel> GetDeviceAsync(string serialNumber, bool create)
-    {
-        var device = await _repository.GetDeviceAsync(serialNumber);
-
-        if (device == null && create)
-        {
-            device = new DeviceModel() { SerialNumber = serialNumber, IsOnline = false };
-        }
-
-        return device;
-    }
+    public Task<DeviceModel> GetDeviceAsync(string serialNumber) =>
+        _repository.GetDeviceAsync(serialNumber);
 
     public IAsyncEnumerable<DeviceModel> GetDevicesAsync(CancellationToken ct) =>
         _repository.GetDevicesAsync(ct);

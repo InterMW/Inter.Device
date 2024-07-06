@@ -33,4 +33,9 @@ public class DeviceGrpcClient : IDeviceGrpcClient
             yield return result.ResponseStream.Current.ToModel();
         }
     }
+
+    public async Task<DeviceModel> CreateDeviceAsync(string serialNumber)
+    {
+
+    }
 }
