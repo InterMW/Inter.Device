@@ -24,10 +24,6 @@ public class DeviceRepository : BaseRepository, IDeviceRepository
     public Task SetDeviceAsync(DeviceModel model) =>
         Collection.UpsertAsync(model.SerialNumber, model);
 
-    public Task CreateDeviceAsync(DeviceModel model)
-    {
-
+    public Task CreateDeviceAsync(DeviceModel model) =>
         Collection.InsertAsync(model.SerialNumber, model);
-        make it return what it made
-    }
 }

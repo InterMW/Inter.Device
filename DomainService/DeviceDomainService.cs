@@ -1,3 +1,4 @@
+using Device.Common;
 using Device.Domain;
 using Infrastructure.RepositoryCore;
 
@@ -8,7 +9,7 @@ public interface IDeviceDomainService
     Task<DeviceModel> GetDeviceAsync(string serialNumber);
     IAsyncEnumerable<DeviceModel> GetDevicesAsync(CancellationToken ct);
     Task SetOnlineState(string serialNumber, bool state);
-    Task<DeviceModel> CreateDeviceAsync(string serialNumber);
+    Task CreateDeviceAsync(string serialNumber);
 }
 
 public class DeviceDomainService : IDeviceDomainService
@@ -19,23 +20,48 @@ public class DeviceDomainService : IDeviceDomainService
     {
         _repository = repository;
     }
-    public Task<DeviceModel> CreateDeviceAsync(string serialNumber) =>
-        _repository.CreateDeviceAsync(new DeviceModel()
-        { IsOnline = false, SerialNumber = serialNumber });
 
-    public Task<DeviceModel> GetDeviceAsync(string serialNumber) =>
-        _repository.GetDeviceAsync(serialNumber);
+    public async Task CreateDeviceAsync(string serialNumber)
+    {
+        ValidateSerialNumber(serialNumber);
+        try
+        {
+            await _repository.CreateDeviceAsync(new DeviceModel() { IsOnline = false, SerialNumber = serialNumber });
+        }
+        catch (System.Exception)
+        {
+            throw new DeviceCannotBeCreatedException();
+        }
+    }
+
+    public Task<DeviceModel> GetDeviceAsync(string serialNumber)
+    {
+        if(serialNumber.Length != 12)
+        {
+            throw new DeviceSerialNumberInvalidException();
+        }
+        return _repository.GetDeviceAsync(serialNumber);
+
+    }
 
     public IAsyncEnumerable<DeviceModel> GetDevicesAsync(CancellationToken ct) =>
         _repository.GetDevicesAsync(ct);
 
-    public async Task SetOnlineState(string serialNumber, bool state) 
+    public async Task SetOnlineState(string serialNumber, bool state)
     {
-       var device = await _repository.GetDeviceAsync(serialNumber);
-       //handle errors and such
-       
-       device.IsOnline = state;
-    
-       await _repository.SetDeviceAsync(device);
+        var device = await _repository.GetDeviceAsync(serialNumber);
+        //handle errors and such
+
+        device.IsOnline = state;
+
+        await _repository.SetDeviceAsync(device);
+    }
+
+    private void ValidateSerialNumber(string serialNumber)
+    {
+        if(serialNumber.Length != 12)
+        {
+            throw new DeviceSerialNumberInvalidException();
+        }
     }
 }

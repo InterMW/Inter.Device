@@ -26,6 +26,5 @@ public class DeviceController
         return await _domainService.GetDevicesAsync(ct)
                     .Select(_ => _.SerialNumber)
                     .ToArrayAsync();
-
     }
 }

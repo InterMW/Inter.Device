@@ -1,11 +1,26 @@
+using Application;
 using Device.Grpc;
+using MelbergFramework.Application;
 
-var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddGrpc();
-var app = builder.Build();
-
-app.MapGet("/device", () => "Hello World!");
-
-app.MapGrpcService<DeviceGrpcServer>().RequireHost("*:6000");
-
-app.Run();
+internal class Program
+{
+    private static async Task Main(string[] args)
+    {
+        await MelbergHost
+            .CreateHost<AppRegistrator>()
+            .AddServices(_ =>
+                    {
+                        _.AddGrpc(options => 
+                                {
+                                    options.Interceptors.Add<ServerExceptionInterceptor>();
+                                });
+                    })
+            .ConfigureApp(app =>
+                    {
+                        app.MapGrpcService<DeviceGrpcServer>().RequireHost("*:6000");
+                    })
+            .AddControllers()
+            .Build()
+            .RunAsync();
+    }
+}
