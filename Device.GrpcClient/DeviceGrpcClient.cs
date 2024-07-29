@@ -11,6 +11,8 @@ namespace Device.GrpcClient;
 public interface IDeviceGrpcClient
 {
     IAsyncEnumerable<DeviceModel> GetDevicesAsync(CancellationToken ct);
+    Task CreateDeviceAsync(string serialNumber);
+    Task<DeviceModel> GetDeviceAsync(string serialNumber);
 }
 
 public class DeviceGrpcClient : IDeviceGrpcClient
