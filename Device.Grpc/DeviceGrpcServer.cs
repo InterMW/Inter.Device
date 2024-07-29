@@ -1,3 +1,4 @@
+using Device.GrpcClient;
 using DomainService;
 using Grpc.Core;
 

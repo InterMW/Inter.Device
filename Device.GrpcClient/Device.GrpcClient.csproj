@@ -1,21 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Device.Domain\Device.Domain.csproj" />
+  </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <IsPackable>false</IsPackable>
+    <PackageId>Device.GrpcClient</PackageId>
+    <Version>1.0.2</Version>
+    <Authors>Joseph Melberg</Authors>
+    <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
   </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore" Version="2.63.0" />
     <PackageReference Include="Grpc.StatusProto" Version="2.64.0" />
   </ItemGroup>
+
   <ItemGroup>
       <Protobuf Include="../device.proto" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Device.Domain\Device.Domain.csproj" />
-    <ProjectReference Include="..\DomainService\DomainService.csproj" />
-    <ProjectReference Include="..\Common\Common.csproj" />
-    <ProjectReference Include="..\Device.GrpcClient\Device.GrpcClient.csproj" />
-  </ItemGroup>
+
 </Project>

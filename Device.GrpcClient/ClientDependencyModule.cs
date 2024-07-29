@@ -1,7 +1,6 @@
-
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Device.Grpc;
+namespace Device.GrpcClient;
 
 public static class DeviceGrpcDependencyModule
 {

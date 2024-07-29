@@ -2,7 +2,7 @@ using Google.Rpc;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
 
-namespace Device.Grpc;
+namespace Device.GrpcClient;
 
 public class ClientExceptionInterceptor : Interceptor
 {

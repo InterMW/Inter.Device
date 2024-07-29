@@ -6,7 +6,7 @@ using Grpc.Net.Client;
 using Microsoft.Extensions.Configuration;
 using static Device.DeviceService;
 
-namespace Device.Grpc;
+namespace Device.GrpcClient;
 
 public interface IDeviceGrpcClient
 {
