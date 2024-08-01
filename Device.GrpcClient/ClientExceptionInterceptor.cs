@@ -6,15 +6,11 @@ namespace Device.GrpcClient;
 
 public class ClientExceptionInterceptor : Interceptor
 {
-    public ClientExceptionInterceptor()
-    {
-    }
-
     public override AsyncClientStreamingCall<TRequest, TResponse> AsyncClientStreamingCall<TRequest, TResponse>(ClientInterceptorContext<TRequest, TResponse> context, AsyncClientStreamingCallContinuation<TRequest, TResponse> continuation)
     {
         try
         {
-        return base.AsyncClientStreamingCall(context, continuation);
+            return base.AsyncClientStreamingCall(context, continuation);
         } catch (RpcException ex) {throw Exceptor(ex);}
     }
 
@@ -26,19 +22,11 @@ public class ClientExceptionInterceptor : Interceptor
         } catch (RpcException ex) {throw Exceptor(ex);}
     }
 
-    public override AsyncServerStreamingCall<TResponse> AsyncServerStreamingCall<TRequest, TResponse>(TRequest request, ClientInterceptorContext<TRequest, TResponse> context, AsyncServerStreamingCallContinuation<TRequest, TResponse> continuation)
-    {
-        try
-        {
-        return base.AsyncServerStreamingCall(request, context, continuation);
-        } catch (RpcException ex) {throw Exceptor(ex);}
-    }
-
     public override AsyncUnaryCall<TResponse> AsyncUnaryCall<TRequest, TResponse>(TRequest request, ClientInterceptorContext<TRequest, TResponse> context, AsyncUnaryCallContinuation<TRequest, TResponse> continuation)
     {
         try
         {
-        return base.AsyncUnaryCall(request, context, continuation);
+            return base.AsyncUnaryCall(request, context, continuation);
         } catch (RpcException ex) {throw Exceptor(ex);}
     }
 
@@ -50,35 +38,11 @@ public class ClientExceptionInterceptor : Interceptor
         } catch (RpcException ex) {throw Exceptor(ex);}
     }
 
-    public override Task<TResponse> ClientStreamingServerHandler<TRequest, TResponse>(IAsyncStreamReader<TRequest> requestStream, ServerCallContext context, ClientStreamingServerMethod<TRequest, TResponse> continuation)
+    public override async Task<TResponse> ClientStreamingServerHandler<TRequest, TResponse>(IAsyncStreamReader<TRequest> requestStream, ServerCallContext context, ClientStreamingServerMethod<TRequest, TResponse> continuation)
     {
         try
         {
-        return base.ClientStreamingServerHandler(requestStream, context, continuation);
-        } catch (RpcException ex) {throw Exceptor(ex);}
-    }
-
-    public override Task DuplexStreamingServerHandler<TRequest, TResponse>(IAsyncStreamReader<TRequest> requestStream, IServerStreamWriter<TResponse> responseStream, ServerCallContext context, DuplexStreamingServerMethod<TRequest, TResponse> continuation)
-    {
-        try
-        {
-        return base.DuplexStreamingServerHandler(requestStream, responseStream, context, continuation);
-        } catch (RpcException ex) {throw Exceptor(ex);}
-    }
-
-    public override Task ServerStreamingServerHandler<TRequest, TResponse>(TRequest request, IServerStreamWriter<TResponse> responseStream, ServerCallContext context, ServerStreamingServerMethod<TRequest, TResponse> continuation)
-    {
-        try
-        {
-        return base.ServerStreamingServerHandler(request, responseStream, context, continuation);
-        } catch (RpcException ex) {throw Exceptor(ex);}
-    }
-
-    public override Task<TResponse> UnaryServerHandler<TRequest, TResponse>(TRequest request, ServerCallContext context, UnaryServerMethod<TRequest, TResponse> continuation)
-    {
-        try
-        {
-        return base.UnaryServerHandler(request, context, continuation);
+        return await base.ClientStreamingServerHandler(requestStream, context, continuation);
         } catch (RpcException ex) {throw Exceptor(ex);}
     }
 

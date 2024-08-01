@@ -1,4 +1,3 @@
-using Device.GrpcClient;
 using DomainService;
 using Grpc.Core;
 
@@ -48,5 +47,4 @@ public class DeviceGrpcServer : DeviceService.DeviceServiceBase
     public override bool Equals(object? obj) => base.Equals(obj);
     
     public override int GetHashCode() => base.GetHashCode();
-
 }

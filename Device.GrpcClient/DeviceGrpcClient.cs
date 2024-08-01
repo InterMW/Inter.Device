@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using Device.Domain;
+using Google.Rpc;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
 using Grpc.Net.Client;
@@ -31,23 +32,58 @@ public class DeviceGrpcClient : IDeviceGrpcClient
         _service = new DeviceServiceClient(_channel);
     }
 
-    public async IAsyncEnumerable<DeviceModel> GetDevicesAsync( [EnumeratorCancellation] CancellationToken ct)
+    public async IAsyncEnumerable<DeviceModel> GetDevicesAsync([EnumeratorCancellation] CancellationToken ct)
     {
-        var result = _service.GetDevices(new DeviceQueryMessage()); 
-        while(await result.ResponseStream.MoveNext(ct))
+        var result = _service.GetDevices(new DeviceQueryMessage());
+
+        while (true)
         {
+            try
+            {
+
+                var next = await result.ResponseStream.MoveNext(ct);
+                if (!next)
+                {
+                    break;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw Exceptor(ex);
+            }
             yield return result.ResponseStream.Current.ToModel();
         }
     }
 
     public async Task<DeviceModel> GetDeviceAsync(string serialNumber)
     {
-        var result = await _service.GetDeviceAsync(new DeviceRequestMessage(){Serial = serialNumber});
+        var result = await _service.GetDeviceAsync(new DeviceRequestMessage() { Serial = serialNumber });
         return result.ToModel();
     }
 
     public async Task CreateDeviceAsync(string serialNumber)
     {
-        await _service.CreateDeviceAsync(new DeviceCreateMessage(){Serial = serialNumber});
+        await _service.CreateDeviceAsync(new DeviceCreateMessage() { Serial = serialNumber });
+    }
+
+    private Exception Exceptor(Exception ex)
+    {
+        if (ex is RpcException)
+        {
+            var richException = ((RpcException)ex).GetRpcStatus()?.GetDetail<ErrorInfo>();
+
+            if (richException != null)
+            {
+                Type type = Type.GetType(richException.Domain);
+
+                if (type != null)
+                {
+                    return (Exception)Activator.CreateInstance(type, richException.Reason) ?? new Exception(ex.Message);
+                }
+            }
+            return new Exception(ex.Message);
+        }
+
+        return ex;
     }
 }
