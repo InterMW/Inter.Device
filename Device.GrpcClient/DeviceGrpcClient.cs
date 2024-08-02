@@ -2,7 +2,6 @@ using System.Runtime.CompilerServices;
 using Device.Domain;
 using Google.Rpc;
 using Grpc.Core;
-using Grpc.Core.Interceptors;
 using Grpc.Net.Client;
 using Microsoft.Extensions.Configuration;
 using static Device.DeviceService;
@@ -13,6 +12,7 @@ public interface IDeviceGrpcClient
 {
     IAsyncEnumerable<DeviceModel> GetDevicesAsync(CancellationToken ct);
     Task CreateDeviceAsync(string serialNumber);
+    Task SetDeviceLifeState(string serialNumber, bool isAlive);
     Task<DeviceModel> GetDeviceAsync(string serialNumber);
 }
 
@@ -25,9 +25,7 @@ public class DeviceGrpcClient : IDeviceGrpcClient
     {
         var uri = configuration.GetConnectionString("DevicesGrpc") ?? throw new Exception("Grpc Uri missing for DeviceGrpc");
 
-        var channel = GrpcChannel.ForAddress(uri);
-
-        var _channel = channel.Intercept(new ClientExceptionInterceptor());
+        _channel = GrpcChannel.ForAddress(uri);
 
         _service = new DeviceServiceClient(_channel);
     }
@@ -38,39 +36,67 @@ public class DeviceGrpcClient : IDeviceGrpcClient
 
         while (true)
         {
+            DeviceModel current;
             try
             {
-
                 var next = await result.ResponseStream.MoveNext(ct);
                 if (!next)
                 {
                     break;
                 }
+                current = result.ResponseStream.Current.ToModel();
             }
             catch (Exception ex)
             {
                 throw Exceptor(ex);
             }
-            yield return result.ResponseStream.Current.ToModel();
+            yield return current;
+        }
+    }
+
+    public async Task SetDeviceLifeState(string serialNumber, bool isAlive)
+    {
+        try
+        {
+            await _service.SetAliveStateAsync( new DeviceStateMessage(){ Serial = serialNumber, IsOnline = isAlive});
+        }
+        catch (Exception ex)
+        {
+            throw Exceptor(ex);
         }
     }
 
     public async Task<DeviceModel> GetDeviceAsync(string serialNumber)
     {
-        var result = await _service.GetDeviceAsync(new DeviceRequestMessage() { Serial = serialNumber });
-        return result.ToModel();
+        try
+        {
+            var result = await _service.GetDeviceAsync(new DeviceRequestMessage() { Serial = serialNumber });
+            return result.ToModel();
+        }
+        catch (Exception ex)
+        {
+            throw Exceptor(ex);
+        }
     }
 
     public async Task CreateDeviceAsync(string serialNumber)
     {
-        await _service.CreateDeviceAsync(new DeviceCreateMessage() { Serial = serialNumber });
+        try
+        {
+            await _service.CreateDeviceAsync(new DeviceCreateMessage() { Serial = serialNumber });
+        }
+        catch (Exception ex)
+        {
+            throw Exceptor(ex);
+        }
     }
 
     private Exception Exceptor(Exception ex)
     {
         if (ex is RpcException)
         {
-            var richException = ((RpcException)ex).GetRpcStatus()?.GetDetail<ErrorInfo>();
+            var rich = ((RpcException)ex).GetRpcStatus();
+            var richException = rich?.GetDetail<ErrorInfo>();
 
             if (richException != null)
             {
@@ -81,7 +107,7 @@ public class DeviceGrpcClient : IDeviceGrpcClient
                     return (Exception)Activator.CreateInstance(type, richException.Reason) ?? new Exception(ex.Message);
                 }
             }
-            return new Exception(ex.Message);
+            return new Exception("Undefined error occurred.");
         }
 
         return ex;

@@ -4,6 +4,11 @@
     <ProjectReference Include="..\Device.Domain\Device.Domain.csproj" />
     <ProjectReference Include="..\Infrastructure.RepositoryCore\Infrastructure.RepositoryCore.csproj" />
     <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\Device.Common\Device.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
   </ItemGroup>
 
   <PropertyGroup>

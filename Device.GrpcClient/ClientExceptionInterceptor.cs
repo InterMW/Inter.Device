@@ -59,6 +59,6 @@ public class ClientExceptionInterceptor : Interceptor
                 return (Exception)Activator.CreateInstance(type, richException.Reason) ?? new Exception(ex.Message);
             }
         }
-        return new Exception(ex.Message);
+        return new Exception("Undefined error occurred.");
     }
 }

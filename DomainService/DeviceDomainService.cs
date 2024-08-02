@@ -1,6 +1,7 @@
 using Device.Common;
 using Device.Domain;
 using Infrastructure.RepositoryCore;
+using Microsoft.Extensions.Logging;
 
 namespace DomainService;
 
@@ -15,10 +16,12 @@ public interface IDeviceDomainService
 public class DeviceDomainService : IDeviceDomainService
 {
     private readonly IDeviceRepository _repository;
+    private readonly ILogger<DeviceDomainService> _logger;
 
-    public DeviceDomainService(IDeviceRepository repository)
+    public DeviceDomainService(IDeviceRepository repository, ILogger<DeviceDomainService> logger)
     {
         _repository = repository;
+        _logger = logger;
     }
 
     public async Task CreateDeviceAsync(string serialNumber)
@@ -28,18 +31,16 @@ public class DeviceDomainService : IDeviceDomainService
         {
             await _repository.CreateDeviceAsync(new DeviceModel() { IsOnline = false, SerialNumber = serialNumber });
         }
-        catch (System.Exception)
+        catch (System.Exception ex)
         {
-            throw new DeviceCannotBeCreatedException();
+            _logger.LogError(ex.Message);
+            throw new DeviceCannotBeCreatedException(serialNumber);
         }
     }
 
     public Task<DeviceModel> GetDeviceAsync(string serialNumber)
     {
-        if(serialNumber.Length != 12)
-        {
-            throw new DeviceSerialNumberInvalidException();
-        }
+        ValidateSerialNumber(serialNumber);
         return _repository.GetDeviceAsync(serialNumber);
 
     }
@@ -61,7 +62,7 @@ public class DeviceDomainService : IDeviceDomainService
     {
         if(serialNumber.Length != 12)
         {
-            throw new DeviceSerialNumberInvalidException();
+            throw new DeviceSerialNumberInvalidException(serialNumber);
         }
     }
 }

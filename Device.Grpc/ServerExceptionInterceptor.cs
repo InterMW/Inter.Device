@@ -2,11 +2,17 @@ using Google.Protobuf.WellKnownTypes;
 using Google.Rpc;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
+using Microsoft.Extensions.Logging;
 
 namespace Device.Grpc;
 
 public class ServerExceptionInterceptor : Interceptor
 {
+    private readonly ILogger<ServerExceptionInterceptor> _logger;
+    public ServerExceptionInterceptor(ILogger<ServerExceptionInterceptor> logger)
+    {
+        _logger = logger;
+    }
 
     public override AsyncDuplexStreamingCall<TRequest, TResponse> AsyncDuplexStreamingCall<TRequest, TResponse>(ClientInterceptorContext<TRequest, TResponse> context, AsyncDuplexStreamingCallContinuation<TRequest, TResponse> continuation)
     {
@@ -65,8 +71,8 @@ public class ServerExceptionInterceptor : Interceptor
             {
                 Any.Pack( new ErrorInfo
                         {
-                            Domain = ex.GetType().FullName,
-                            Reason = ex.Message
+                            Domain = ex.GetType().AssemblyQualifiedName,
+                            Reason = ex.Message,
                         }
                 )
             }
