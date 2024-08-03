@@ -72,7 +72,7 @@ public class ServerExceptionInterceptor : Interceptor
             {
                 Any.Pack( new ErrorInfo
                         {
-                            Domain = ex.GetType().FullName,
+                            Domain = ex.GetType().Name,
                             Reason = ex.Message,
                         }
                 )

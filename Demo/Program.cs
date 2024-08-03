@@ -19,7 +19,6 @@ device = await j.GetDeviceAsync(sn);
 Console.WriteLine(device.IsOnline);
 
 
-
 await foreach( var dev in 
         j.GetDevicesAsync(CancellationToken.None))
 {

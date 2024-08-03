@@ -103,6 +103,7 @@ public class DeviceGrpcClient : IDeviceGrpcClient
 
                 if (richException != null)
                 {
+                    Console.WriteLine(richException.Domain);
                     switch (richException.Domain)
                     {
                         case DeviceSerialNumberInvalidException.Name:
