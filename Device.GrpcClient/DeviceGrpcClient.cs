@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using Device.Common;
 using Device.Domain;
 using Google.Rpc;
 using Grpc.Core;
@@ -96,18 +97,22 @@ public class DeviceGrpcClient : IDeviceGrpcClient
         if (ex is RpcException)
         {
             var rich = ((RpcException)ex).GetRpcStatus();
-            var richException = rich?.GetDetail<ErrorInfo>();
-
-            if (richException != null)
+            if(rich.Code == 999)
             {
-                Type type = Type.GetType(richException.Domain);
+                var richException = rich?.GetDetail<ErrorInfo>();
 
-                if (type != null)
+                if (richException != null)
                 {
-                    return (Exception)Activator.CreateInstance(type, richException.Reason) ?? new Exception(ex.Message);
+                    switch (richException.Domain)
+                    {
+                        case DeviceSerialNumberInvalidException.Name:
+                            return new DeviceSerialNumberInvalidException(richException.Reason);
+                        case DeviceCannotBeCreatedException.Name:
+                            return new DeviceCannotBeCreatedException(richException.Reason);
+                    }
                 }
+                return new Exception("Undefined error occurred.");
             }
-            return new Exception("Undefined error occurred.");
         }
 
         return ex;

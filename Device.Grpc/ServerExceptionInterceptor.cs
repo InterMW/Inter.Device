@@ -65,13 +65,13 @@ public class ServerExceptionInterceptor : Interceptor
     {
         var status = new Google.Rpc.Status
         {
-            Code = (int)Code.Aborted,
+            Code = 999,
             Message = "An error occurred",
             Details =
             {
                 Any.Pack( new ErrorInfo
                         {
-                            Domain = ex.GetType().AssemblyQualifiedName,
+                            Domain = ex.GetType().Name,
                             Reason = ex.Message,
                         }
                 )

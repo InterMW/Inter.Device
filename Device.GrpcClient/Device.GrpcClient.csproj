@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Device.Domain\Device.Domain.csproj" />
+    <ProjectReference Include="..\Device.Common\Device.Common.csproj" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
