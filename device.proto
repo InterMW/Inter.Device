@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package device;
+
+service DeviceService {
+  rpc SetAliveState (DeviceStateMessage) returns (Empty);
+  rpc CreateDevice (DeviceCreateMessage) returns (Empty);
+  rpc GetDevice (DeviceRequestMessage) returns (DeviceDto);
+  rpc GetDevices (DeviceQueryMessage) returns (stream DeviceDto);
+}
+
+message DeviceDto {
+  string serial = 1;
+  bool is_online = 2;
+}
+
+message DeviceCreateMessage {
+    string serial = 1;
+}
+
+message DeviceRequestMessage {
+  string serial = 1;
+}
+
+message DeviceStateMessage {
+  string serial = 1;
+  bool is_online = 2;
+}
+
+message DeviceQueryMessage { }
+
+message Empty {}

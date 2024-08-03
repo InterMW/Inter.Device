@@ -2,8 +2,9 @@ using Device.Domain;
 
 namespace Device.Grpc;
 
-public static class DeviceMapper
+public static class ServerSideMapper
 {
+
     public static DeviceDto ToDto(this DeviceModel model) =>
         new()
         {

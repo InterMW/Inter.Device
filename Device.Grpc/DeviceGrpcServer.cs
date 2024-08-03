@@ -1,20 +1,50 @@
-using Device.Domain;
+using DomainService;
 using Grpc.Core;
 
 namespace Device.Grpc;
 
 public class DeviceGrpcServer : DeviceService.DeviceServiceBase
 {
-    public override async Task GetDevices(Empty request, IServerStreamWriter<DeviceDto> responseStream, ServerCallContext context)
+    private readonly IDeviceDomainService _domainService;
+
+    public DeviceGrpcServer(IDeviceDomainService domainService)
     {
-        for(var i = 0; i < 100; i++)
+        _domainService = domainService;
+    }
+
+    public override async Task<Empty> CreateDevice(DeviceCreateMessage request, ServerCallContext context)
+    {
+        await _domainService.CreateDeviceAsync(request.Serial);
+        return new Empty();
+    }
+
+    public override async Task<DeviceDto> GetDevice(DeviceRequestMessage request, ServerCallContext context)
+    {
+        var result = await _domainService.GetDeviceAsync(request.Serial);
+        return result.ToDto();
+    }
+
+    public override async Task GetDevices(DeviceQueryMessage request, IServerStreamWriter<DeviceDto> responseStream, ServerCallContext context)
+    {
+        await foreach(var device in _domainService.GetDevicesAsync(context.CancellationToken))
         {
-            await responseStream.WriteAsync(new DeviceModel(){SerialNumber = $"SN{i}", IsOnline = (i % 2) == 0}.ToDto());
+            await responseStream.WriteAsync(device.ToDto());
         }
     }
 
-    public override Task<Empty> SetAliveState(DeviceStateMessage request, ServerCallContext context)
+    public override async Task<Empty> SetAliveState(DeviceStateMessage request, ServerCallContext context)
     {
-        return base.SetAliveState(request, context);
+        await _domainService.SetOnlineState(request.Serial, request.IsOnline);
+
+        return new Empty();
     }
+
+
+    // The following are defined becuase I use the "generate overrides"
+    // function to fill out the generated stuff
+    public override string? ToString() => base.ToString();
+
+    public override bool Equals(object? obj) => base.Equals(obj);
+    
+    public override int GetHashCode() => base.GetHashCode();
 }

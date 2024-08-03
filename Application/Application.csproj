@@ -2,6 +2,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Device.Grpc\Device.Grpc.csproj" />
+    <ProjectReference Include="..\Infrastructure.Couchbase\Infrastructure.Couchbase.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MelbergFramework.Application" Version="8.0.8" />
+    <PackageReference Include="MelbergFramework.Infrastructure.Couchbase" Version="8.0.10" />
   </ItemGroup>
 
   <PropertyGroup>
