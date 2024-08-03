@@ -63,6 +63,7 @@ public class ServerExceptionInterceptor : Interceptor
 
     private Exception Exceptor(Exception ex)
     {
+        //Let's see if we can make this work, still have to decide if this is even what we want
         var status = new Google.Rpc.Status
         {
             Code = 999,
@@ -71,7 +72,7 @@ public class ServerExceptionInterceptor : Interceptor
             {
                 Any.Pack( new ErrorInfo
                         {
-                            Domain = ex.GetType().Name,
+                            Domain = ex.GetType().FullName,
                             Reason = ex.Message,
                         }
                 )
