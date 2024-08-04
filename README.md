@@ -1,5 +1,5 @@
 # Inter.DeviceKeeper
-The center of the Devices domain, this service federates access to Devices.  It does so by exposing a web api and a grpc (contract [here]()].  To further support the grpc, a C# package encapuslates it, depending on the Common and the Domain packages.
+The center of the Devices domain, this service federates access to Devices.  It does so by exposing a web api and a grpc (contract [here](https://github.com/InterMW/Inter.Device/blob/main/device.proto)].  To further support the grpc, a C# package encapuslates it, depending on the Common and the Domain packages.
 
 |Name|Nuget|
 |-|-|
