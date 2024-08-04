@@ -1,3 +1,4 @@
+using Device.Domain;
 using DomainService;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,13 +16,13 @@ public class DeviceController
     }
 
     [HttpGet]
-    [Route("device/{serial}")]
-    public Task GetDevice([FromRoute] string serial) =>
+    [Route("{serial}")]
+    public Task<DeviceModel> GetDevice([FromRoute] string serial) =>
         _domainService.GetDeviceAsync(serial);
 
     [HttpGet]
-    [Route("device/list")]
-    public async  Task<string[]> GetDevices(CancellationToken ct) 
+    [Route("list")]
+    public async Task<string[]> GetDevices(CancellationToken ct) 
     {
         return await _domainService.GetDevicesAsync(ct)
                     .Select(_ => _.SerialNumber)
