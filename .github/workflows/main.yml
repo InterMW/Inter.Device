@@ -32,7 +32,6 @@ jobs:
   build-publish:
     needs: push-package
     runs-on: ubuntu-latest
-    needs: push-package
     env:
       DOCKERFILE: Dockerfile
       PROJECT: Application/Application.csproj
