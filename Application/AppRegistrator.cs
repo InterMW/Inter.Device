@@ -2,6 +2,7 @@ using DomainService;
 using Infrastructure.Couchbase;
 using Infrastructure.RepositoryCore;
 using MelbergFramework.Application;
+using MelbergFramework.Core.Time;
 using MelbergFramework.Infrastructure.Couchbase;
 
 namespace Application;
@@ -13,6 +14,8 @@ public class AppRegistrator : Registrator
     {
         services.AddTransient<IDeviceDomainService, DeviceDomainService>();
         CouchbaseModule.RegisterCouchbaseBucket<IDeviceRepository,DeviceRepository>(services);
+
+         services.AddSingleton<IClock, Clock>();
     }
 
 }
