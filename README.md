@@ -9,7 +9,9 @@ The center of the Devices domain, this service federates access to Devices.  It 
 
 # How to run
 
-Clone this repository and run with `dotnet run --project Application/Application.csproj`
+Clone this repository and run with `dotnet run --project Application/Application.csproj`.
+
+There is a demo project for testing changes.  To use, run the above command to start the server, then (in a separate window) run `dotnet run --project Demo`.
 
 ## General information
 
