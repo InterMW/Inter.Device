@@ -8,13 +8,15 @@ public static class DeviceMapper
         new()
         {
             Serial = model.SerialNumber,
-            IsOnline = model.IsOnline
+            IsOnline = model.IsOnline,
+
         };
 
     public static DeviceModel ToModel(this DeviceDto dto) =>
         new()
         {
             SerialNumber = dto.Serial,
-             IsOnline = dto.IsOnline
+             IsOnline = dto.IsOnline,
+
         };
 }

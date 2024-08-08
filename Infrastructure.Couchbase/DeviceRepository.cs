@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using Couchbase.KeyValue.RangeScan;
 using Device.Domain;
@@ -12,9 +13,15 @@ public class DeviceRepository : BaseRepository, IDeviceRepository
 
     public async IAsyncEnumerable<DeviceModel> GetDevicesAsync([EnumeratorCancellation] CancellationToken ct)
     {
-        await foreach (var device in Collection.ScanAsync(new RangeScan()))
+        var stop = new Stopwatch();
+        stop.Start();
+        var quer = Collection.ScanAsync(new RangeScan());
+        Console.WriteLine(stop.ElapsedMilliseconds);
+        await foreach (var device in quer)
         {
-            yield return device.ContentAs<DeviceModel>();
+            var j = device.ContentAs<DeviceModel>();
+            Console.WriteLine(stop.ElapsedMilliseconds);
+            yield return j;
         };
     }
 

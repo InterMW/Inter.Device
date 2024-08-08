@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
+
 package device;
 
 service DeviceService {
@@ -12,6 +14,7 @@ service DeviceService {
 message DeviceDto {
   string serial = 1;
   bool is_online = 2;
+  google.protobuf.Timestamp last_state_change = 3;
 }
 
 message DeviceCreateMessage {

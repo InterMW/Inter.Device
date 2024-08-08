@@ -3,7 +3,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Device.Grpc\Device.Grpc.csproj" />
-    <ProjectReference Include="..\Device.Common\Device.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
