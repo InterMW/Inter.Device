@@ -1,9 +1,10 @@
+using Device.GrpcCommon;
 using DomainService;
 using Grpc.Core;
 
 namespace Device.Grpc;
 
-public class DeviceGrpcServer : DeviceService.DeviceServiceBase
+public class DeviceGrpcServer : DeviceServiceBaseCommon
 {
     private readonly IDeviceDomainService _domainService;
 
@@ -43,8 +44,6 @@ public class DeviceGrpcServer : DeviceService.DeviceServiceBase
     // The following are defined becuase I use the "generate overrides"
     // function to fill out the generated stuff
     public override string? ToString() => base.ToString();
-
-    public override bool Equals(object? obj) => base.Equals(obj);
     
     public override int GetHashCode() => base.GetHashCode();
 }

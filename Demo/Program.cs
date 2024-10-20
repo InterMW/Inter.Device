@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Device.GrpcClient;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +27,6 @@ await foreach( var dev in
 }
 await j.CreateDeviceAsync("aaaaaaaaaaaa");
 
-app.MapGet("/", () => "Hello World!");
+//app.MapGet("/", () => "Hello World!");
 
-app.Run();
+//app.Run();

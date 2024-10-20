@@ -1,5 +1,4 @@
 using System.Runtime.CompilerServices;
-using Couchbase.KeyValue.RangeScan;
 using Device.Domain;
 using Infrastructure.RepositoryCore;
 using MelbergFramework.Infrastructure.Couchbase;
@@ -12,9 +11,13 @@ public class DeviceRepository : BaseRepository, IDeviceRepository
 
     public async IAsyncEnumerable<DeviceModel> GetDevicesAsync([EnumeratorCancellation] CancellationToken ct)
     {
-        await foreach (var device in Collection.ScanAsync(new RangeScan()))
+        //This makes me very sad but I am tired and I don't want to have to write another package so I'll leave this as a todo
+        //Using Collection.Scan is insanely unperformant (takes 10 seconds to return 10 items) 
+        var quer = await Collection.Scope.Bucket.Cluster.QueryAsync<DeviceModel>("SELECT a.* from device._default.device as a");
+
+        await foreach (var device in quer)
         {
-            yield return device.ContentAs<DeviceModel>();
+            yield return device;
         };
     }
 

@@ -1,4 +1,5 @@
 using Application;
+using Device;
 using LightBDD.MsTest3;
 using MelbergFramework.Application;
 using MelbergFramework.ComponentTesting.Couchbase;
@@ -23,7 +24,6 @@ public class BaseTestFrame : FeatureFixture
                 })
                 .AddControllers()
                 .Build();
-
     }
 
     public WebApplication App;
