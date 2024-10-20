@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Device.Common", "Device.Com
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{4E336272-7D41-49AC-A6CE-6358FFAE7B74}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Device.GrpcCommon", "Device.GrpcCommon\Device.GrpcCommon.csproj", "{3D8273B1-B418-4225-ABE5-ACAD1206ED48}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -66,5 +68,9 @@ Global
 		{4E336272-7D41-49AC-A6CE-6358FFAE7B74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E336272-7D41-49AC-A6CE-6358FFAE7B74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E336272-7D41-49AC-A6CE-6358FFAE7B74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D8273B1-B418-4225-ABE5-ACAD1206ED48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D8273B1-B418-4225-ABE5-ACAD1206ED48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D8273B1-B418-4225-ABE5-ACAD1206ED48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D8273B1-B418-4225-ABE5-ACAD1206ED48}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

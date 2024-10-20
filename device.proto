@@ -15,6 +15,7 @@ message DeviceDto {
   string serial = 1;
   bool is_online = 2;
   google.protobuf.Timestamp last_state_change = 3;
+  google.protobuf.Timestamp first_heard_from = 4;
 }
 
 message DeviceCreateMessage {

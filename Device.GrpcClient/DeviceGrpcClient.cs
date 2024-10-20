@@ -1,11 +1,11 @@
 using System.Runtime.CompilerServices;
 using Device.Common;
 using Device.Domain;
+using Device.GrpcCommon;
 using Google.Rpc;
 using Grpc.Core;
 using Grpc.Net.Client;
 using Microsoft.Extensions.Configuration;
-using static Device.DeviceService;
 
 namespace Device.GrpcClient;
 
@@ -19,7 +19,7 @@ public interface IDeviceGrpcClient
 
 public class DeviceGrpcClient : IDeviceGrpcClient
 {
-    private readonly DeviceServiceClient _service;
+    private readonly DeviceGrpcServiceClient _service;
     private readonly GrpcChannel _channel;
 
     public DeviceGrpcClient(IConfiguration configuration)
@@ -28,7 +28,7 @@ public class DeviceGrpcClient : IDeviceGrpcClient
 
         _channel = GrpcChannel.ForAddress(uri);
 
-        _service = new DeviceServiceClient(_channel);
+        _service = new DeviceGrpcServiceClient(_channel);
     }
 
     public async IAsyncEnumerable<DeviceModel> GetDevicesAsync([EnumeratorCancellation] CancellationToken ct)
@@ -94,24 +94,26 @@ public class DeviceGrpcClient : IDeviceGrpcClient
 
     private Exception Exceptor(Exception ex)
     {
-        if (ex is RpcException)
+        var richException = ex as RpcException;
+        if (richException is not null)
         {
-            var rich = ((RpcException)ex).GetRpcStatus();
-            if(rich.Code == 999)
-            {
-                var richException = rich?.GetDetail<ErrorInfo>();
 
-                if (richException != null)
+            var richExceptionStatus = richException.GetRpcStatus();
+            if(richExceptionStatus?.Code == 999)
+            {
+                var richExceptionDetail = richExceptionStatus.GetDetail<ErrorInfo>();
+
+                if (richExceptionDetail is not null)
                 {
-                    Console.WriteLine(richException.Domain);
-                    switch (richException.Domain)
+                    switch (richExceptionDetail.Domain)
                     {
-                        case DeviceSerialNumberInvalidException.Name:
-                            return new DeviceSerialNumberInvalidException(richException.Reason);
-                        case DeviceCannotBeCreatedException.Name:
-                            return new DeviceCannotBeCreatedException(richException.Reason);
+                        case nameof(DeviceSerialNumberInvalidException):
+                            return new DeviceSerialNumberInvalidException(richExceptionDetail.Reason);
+                        case nameof(DeviceCannotBeCreatedException):
+                            return new DeviceCannotBeCreatedException(richExceptionDetail.Reason);
                     }
                 }
+
                 return new Exception("Undefined error occurred.");
             }
         }
