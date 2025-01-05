@@ -4,7 +4,10 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <IsPackable>false</IsPackable>
+    <PackageId>Device.GrpcCommon</PackageId>
+    <Version>1.0.2</Version>
+    <Authors>Joseph Melberg</Authors>
+    <PackageLicenseExpression>GPL-3.0-only</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
