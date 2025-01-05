@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using Device.Domain;
 
 namespace Infrastructure.RepositoryCore;

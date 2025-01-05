@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Device.Domain\Device.Domain.csproj" />
+    <ProjectReference Include="..\Device.Common\Device.Common.csproj" />
     <ProjectReference Include="..\Infrastructure.RepositoryCore\Infrastructure.RepositoryCore.csproj" />
   </ItemGroup>
 
