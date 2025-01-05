@@ -63,6 +63,7 @@ public class ServerExceptionInterceptor : Interceptor
 
     private Exception Exceptor(Exception ex)
     {
+        Console.WriteLine(ex.Message);
         //Let's see if we can make this work, still have to decide if this is even what we want
         var status = new Google.Rpc.Status
         {

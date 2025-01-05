@@ -5,6 +5,7 @@
     <ProjectReference Include="..\Infrastructure.RepositoryCore\Infrastructure.RepositoryCore.csproj" />
     <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\Device.Common\Device.Common.csproj" />
+    <ProjectReference Include="..\Infrastructure.MongoDB\Infrastructure.MongoDB.csproj" />
   </ItemGroup>
 
   <ItemGroup>

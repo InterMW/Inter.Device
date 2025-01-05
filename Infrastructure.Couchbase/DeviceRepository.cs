@@ -5,7 +5,7 @@ using MelbergFramework.Infrastructure.Couchbase;
 
 namespace Infrastructure.Couchbase;
 
-public class DeviceRepository : BaseRepository, IDeviceRepository
+public class DeviceRepository : BaseRepository
 {
     public DeviceRepository(IBucketFactory factory) : base("device", factory){}
 

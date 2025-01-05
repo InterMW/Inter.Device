@@ -1,9 +1,8 @@
 using DomainService;
-using Infrastructure.Couchbase;
+using Infrastructure.MongoDB;
 using Infrastructure.RepositoryCore;
 using MelbergFramework.Application;
 using MelbergFramework.Core.Time;
-using MelbergFramework.Infrastructure.Couchbase;
 
 namespace Application;
 
@@ -13,9 +12,13 @@ public class AppRegistrator : Registrator
     public override void RegisterServices(IServiceCollection services)
     {
         services.AddTransient<IDeviceDomainService, DeviceDomainService>();
-        CouchbaseModule.RegisterCouchbaseBucket<IDeviceRepository,DeviceRepository>(services);
+        services.AddTransient<IDeviceRepository,PublicDeviceRepository>();
 
-         services.AddSingleton<IClock, Clock>();
+        services.AddSingleton<IClock, Clock>();
+        services.AddSingleton<DeviceClient>();
+
+        services.AddOptions<MongoDBOptions>()
+            .BindConfiguration(MongoDBOptions.Section)
+            .ValidateDataAnnotations();
     }
-
 }

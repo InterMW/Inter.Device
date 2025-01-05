@@ -6,9 +6,11 @@ DeviceGrpcDependencyModule.RegisterClient(builder.Services);
 var app = builder.Build();
 
 var j = app.Services.GetService<IDeviceGrpcClient>();
-var sn = "aaaaaaaaaaaa";
+var sn = "aaaaaaaaaaad";
+await j.CreateDeviceAsync(sn);
 await j.SetDeviceLifeState(sn, true);
 
+return;
 var device = await j.GetDeviceAsync(sn);
 
 Console.WriteLine(device.IsOnline);
