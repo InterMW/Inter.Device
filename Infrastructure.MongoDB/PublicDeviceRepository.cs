@@ -20,7 +20,7 @@ public class PublicDeviceRepository(DeviceClient client) : IDeviceRepository
     {
         var result = await _standardCollection
             .FindAsync(SerialNumberFilter(serialNumber));
-        return (await result.FirstOrDefaultAsync())?.ToModel() ?? throw new DeviceNotFoundException();
+        return (await result.FirstOrDefaultAsync())?.ToModel() ?? throw new DeviceNotFoundException(serialNumber);
     }
 
     public async IAsyncEnumerable<DeviceModel> GetDevicesAsync(CancellationToken ct)
