@@ -25,6 +25,11 @@ public class DeviceDomainService(
         ValidateSerialNumber(serialNumber);
         try
         {
+            if(await repository.DeviceExists(serialNumber))
+            {
+                throw new System.Exception("Device already exists");
+            }
+
             await repository.CreateDeviceAsync(new DeviceModel() 
             { 
                 IsOnline = false,

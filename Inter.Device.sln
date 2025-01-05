@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Device.GrpcCommon", "Device.GrpcCommon\Device.GrpcCommon.csproj", "{3D8273B1-B418-4225-ABE5-ACAD1206ED48}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.MongoDB", "Infrastructure.MongoDB\Infrastructure.MongoDB.csproj", "{B12BBC8D-3159-4144-88C2-7A6E4E443055}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,5 +74,9 @@ Global
 		{3D8273B1-B418-4225-ABE5-ACAD1206ED48}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D8273B1-B418-4225-ABE5-ACAD1206ED48}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D8273B1-B418-4225-ABE5-ACAD1206ED48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B12BBC8D-3159-4144-88C2-7A6E4E443055}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B12BBC8D-3159-4144-88C2-7A6E4E443055}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B12BBC8D-3159-4144-88C2-7A6E4E443055}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B12BBC8D-3159-4144-88C2-7A6E4E443055}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

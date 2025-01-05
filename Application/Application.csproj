@@ -3,6 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Device.Grpc\Device.Grpc.csproj" />
     <ProjectReference Include="..\Infrastructure.Couchbase\Infrastructure.Couchbase.csproj" />
+    <ProjectReference Include="..\Infrastructure.MongoDB\Infrastructure.MongoDB.csproj" />
   </ItemGroup>
 
   <ItemGroup>
