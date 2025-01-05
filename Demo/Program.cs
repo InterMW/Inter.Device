@@ -6,8 +6,15 @@ DeviceGrpcDependencyModule.RegisterClient(builder.Services);
 var app = builder.Build();
 
 var j = app.Services.GetService<IDeviceGrpcClient>();
-var sn = "aaaaaaaaaaad";
-await j.CreateDeviceAsync(sn);
+var sn = "jaaaaaaaaaa";
+var letters = new []{'a','b','c','d','e','f','g'};
+await Task.WhenAll(letters.Select(_ => j.CreateDeviceAsync(sn + _)));
+await foreach( var dev in j.GetDevicesAsync(CancellationToken.None))
+{
+    Console.WriteLine(dev.SerialNumber, dev.IsOnline);
+}
+return;
+await j.CreateDeviceAsync(sn + "a");
 await j.SetDeviceLifeState(sn, true);
 
 return;

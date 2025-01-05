@@ -1,4 +1,5 @@
 using Device.Domain;
+using Device.Common;
 using Infrastructure.RepositoryCore;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
@@ -19,7 +20,7 @@ public class PublicDeviceRepository(DeviceClient client) : IDeviceRepository
     {
         var result = await _standardCollection
             .FindAsync(SerialNumberFilter(serialNumber));
-        return (await result.FirstOrDefaultAsync()).ToModel();//(DeviceModel) await result.FirstOrDefaultAsync();
+        return (await result.FirstOrDefaultAsync())?.ToModel() ?? throw new DeviceNotFoundException(serialNumber);
     }
 
     public async IAsyncEnumerable<DeviceModel> GetDevicesAsync(CancellationToken ct)

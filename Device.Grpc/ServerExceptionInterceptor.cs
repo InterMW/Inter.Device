@@ -9,6 +9,7 @@ namespace Device.Grpc;
 public class ServerExceptionInterceptor : Interceptor
 {
     private readonly ILogger<ServerExceptionInterceptor> _logger;
+
     public ServerExceptionInterceptor(ILogger<ServerExceptionInterceptor> logger)
     {
         _logger = logger;
@@ -41,7 +42,6 @@ public class ServerExceptionInterceptor : Interceptor
         catch (System.Exception ex) {throw Exceptor(ex); }
     }
 
-
     public override async Task ServerStreamingServerHandler<TRequest, TResponse>(TRequest request, IServerStreamWriter<TResponse> responseStream, ServerCallContext context, ServerStreamingServerMethod<TRequest, TResponse> continuation)
     {
         try
@@ -50,7 +50,6 @@ public class ServerExceptionInterceptor : Interceptor
         }
         catch (System.Exception ex) {throw Exceptor(ex); }
     }
-
 
     public override async Task<TResponse> UnaryServerHandler<TRequest, TResponse>(TRequest request, ServerCallContext context, UnaryServerMethod<TRequest, TResponse> continuation)
     {
@@ -78,9 +77,7 @@ public class ServerExceptionInterceptor : Interceptor
                         }
                 )
             }
-
         };
-
 
         return status.ToRpcException();
     }

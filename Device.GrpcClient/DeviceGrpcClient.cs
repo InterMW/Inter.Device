@@ -111,6 +111,8 @@ public class DeviceGrpcClient : IDeviceGrpcClient
                             return new DeviceSerialNumberInvalidException(richExceptionDetail.Reason);
                         case nameof(DeviceCannotBeCreatedException):
                             return new DeviceCannotBeCreatedException(richExceptionDetail.Reason);
+                        case nameof(DeviceNotFoundException):
+                            return new DeviceNotFoundException(richExceptionDetail.Reason);
                     }
                 }
 
