@@ -28,7 +28,7 @@ jobs:
     - name: Pack 
       run: dotnet pack -o output --configuration Release 
     - name: Push
-      run: nuget push **\*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}}
+      run: dotnet nuget push **\*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}}
   build-publish:
     needs: push-package
     runs-on: ubuntu-latest
