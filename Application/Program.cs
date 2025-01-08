@@ -6,20 +6,22 @@ internal class Program
 {
     private static async Task Main(string[] args)
     {
+        ThreadPool.SetMinThreads(8, 8); //required
         await MelbergHost
             .CreateHost<AppRegistrator>()
             .AddServices(_ =>
                     {
-                        _.AddGrpc(options => 
-                                {
-                                    options.Interceptors.Add<ServerExceptionInterceptor>();
-                                });
+                        _.AddControllers();
+                        _.AddGrpc();
                     })
-            .ConfigureApp(app =>
+             .ConfigureApp(_ =>
                     {
-                        app.MapGrpcService<DeviceGrpcServer>().RequireHost("*:6000");
+                        _.UseSwagger();
+                        _.UseSwaggerUI();
+                        _.UseRouting();
+                        _.MapControllers();
+                        _.MapGrpcService<DeviceGrpcServer>().RequireHost("*:6000");
                     })
-            .AddControllers()
             .Build()
             .RunAsync();
     }
