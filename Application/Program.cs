@@ -19,8 +19,33 @@ internal class Program
                     {
                         app.MapGrpcService<DeviceGrpcServer>().RequireHost("*:6000");
                     })
-            .AddControllers()
+            .AddControllersCors()
             .Build()
             .RunAsync();
+    }
+}
+
+public static class HostExtension
+{
+    public static MelbergHost AddControllersCors(this MelbergHost host)
+    {
+        host.ServiceActions += (IServiceCollection _) => {
+            _.AddControllers();
+            _.AddSwaggerGen();
+        };
+
+        host.AppActions += (WebApplication _) => {
+            _.UseSwagger();
+            _.UseSwaggerUI();
+            _.UseCors(_ => _
+                 .WithOrigins(["*.centurionx.net"])
+                 .AllowAnyHeader()
+                 .AllowAnyMethod()
+                 .AllowCredentials()
+             );
+            _.MapControllers();
+        };
+
+        return host;
     }
 }
