@@ -16,10 +16,8 @@ class DeviceController(IDeviceDomainService domainService)
 
     [HttpGet]
     [Route("list")]
-    public async Task<string[]> GetDevices(CancellationToken ct) 
+    public async Task<DeviceModel[]> GetDevices(CancellationToken ct) 
     {
-        return await domainService.GetDevicesAsync(ct)
-                    .Select(_ => _.SerialNumber)
-                    .ToArrayAsync();
+        return await domainService.GetDevicesAsync(ct).ToArrayAsync();
     }
 }
