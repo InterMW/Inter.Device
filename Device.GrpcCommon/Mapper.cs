@@ -11,6 +11,8 @@ public static class DeviceMapper
             IsOnline = model.IsOnline,
             LastStateChange = Google.Protobuf.WellKnownTypes.TimeExtensions.ToTimestamp(model.LastPowerChange),
             FirstHeardFrom = Google.Protobuf.WellKnownTypes.TimeExtensions.ToTimestamp(model.FirstHeardFrom),
+            Latitude = model.Latitude,
+            Longitude = model.Longitude
         };
 
     public static DeviceModel ToModel(this DeviceDto dto) =>
@@ -19,6 +21,8 @@ public static class DeviceMapper
             SerialNumber = dto.Serial,
             IsOnline = dto.IsOnline,
             FirstHeardFrom = dto.FirstHeardFrom.ToDateTime(),
-            LastPowerChange = dto.LastStateChange.ToDateTime()
+            LastPowerChange = dto.LastStateChange.ToDateTime(),
+            Latitude = dto.Latitude,
+            Longitude = dto.Longitude
         };
 }

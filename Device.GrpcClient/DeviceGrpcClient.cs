@@ -15,6 +15,7 @@ public interface IDeviceGrpcClient
     Task CreateDeviceAsync(string serialNumber);
     Task SetDeviceLifeState(string serialNumber, bool isAlive);
     Task<DeviceModel> GetDeviceAsync(string serialNumber);
+    Task SetDeviceLocation(string serialNumber, float latitude, float longitude);
 }
 
 public class DeviceGrpcClient : IDeviceGrpcClient
@@ -29,6 +30,18 @@ public class DeviceGrpcClient : IDeviceGrpcClient
         _channel = GrpcChannel.ForAddress(uri);
 
         _service = new DeviceGrpcServiceClient(_channel);
+    }
+    
+    public async Task SetDeviceLocation(string serialNumber, float latitude, float longitude)
+    {
+        try
+        {
+            await _service.SetPositionAsync(new DevicePositionMessage(){Serial = serialNumber, Latitude = latitude, Longitude = longitude});
+        }
+        catch (Exception ex)
+        {
+            throw Exceptor(ex);
+        }
     }
 
     public async IAsyncEnumerable<DeviceModel> GetDevicesAsync([EnumeratorCancellation] CancellationToken ct)

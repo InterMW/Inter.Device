@@ -59,7 +59,9 @@ public static class PublicDeviceModelMapper
         SerialNumber = model.SerialNumber,
         IsOnline = model.IsOnline,
         FirstHeardFrom = model.FirstHeardFrom,
-        LastPowerChange = model.LastPowerChange
+        LastPowerChange = model.LastPowerChange,
+        Latitude = model.Latitude,
+        Longitude = model.Longitude
     };
 
     public static DeviceModel ToModel(this PublicDeviceModel model) => new()
@@ -67,7 +69,9 @@ public static class PublicDeviceModelMapper
         SerialNumber = model.SerialNumber,
         IsOnline = model.IsOnline,
         FirstHeardFrom = model.FirstHeardFrom,
-        LastPowerChange = model.LastPowerChange
+        LastPowerChange = model.LastPowerChange,
+        Latitude = model.Latitude,
+        Longitude = model.Longitude
     };
 }
 
@@ -79,4 +83,6 @@ public class PublicDeviceModel
     public bool IsOnline { get; set; }
     public DateTime FirstHeardFrom {get; set;} = DateTime.UtcNow;
     public DateTime LastPowerChange {get; set;} = DateTime.MinValue;
+    public float Latitude {get; set;}
+    public float Longitude {get; set;}
 }
