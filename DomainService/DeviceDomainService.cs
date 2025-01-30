@@ -8,6 +8,7 @@ namespace DomainService;
 
 public interface IDeviceDomainService
 {
+    Task SetPositionAsync(string serialNumber, float latitude, float longitude);
     Task<DeviceModel> GetDeviceAsync(string serialNumber);
     IAsyncEnumerable<DeviceModel> GetDevicesAsync(CancellationToken ct);
     Task SetOnlineState(string serialNumber, bool state);
@@ -19,6 +20,17 @@ public class DeviceDomainService(
         ILogger<DeviceDomainService> logger,
         IClock clock) : IDeviceDomainService
 {
+
+    public async Task SetPositionAsync(string serialNumber, float latitude, float longitude)
+    {
+        ValidateSerialNumber(serialNumber);
+        var device = await repository.GetDeviceAsync(serialNumber);
+
+        device.Latitude = latitude;
+        device.Longitude = longitude;
+
+        await repository.SetDeviceAsync(device);
+    }
 
     public async Task CreateDeviceAsync(string serialNumber)
     {

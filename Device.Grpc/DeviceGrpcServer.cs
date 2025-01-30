@@ -13,9 +13,17 @@ public class DeviceGrpcServer : DeviceServiceBaseCommon
         _domainService = domainService;
     }
 
+    public override async Task<Empty> SetPosition(DevicePositionMessage request, ServerCallContext context)
+    {
+        await _domainService.SetPositionAsync(request.Serial, request.Latitude, request.Longitude);
+
+        return new Empty();
+    }
+
     public override async Task<Empty> CreateDevice(DeviceCreateMessage request, ServerCallContext context)
     {
         await _domainService.CreateDeviceAsync(request.Serial);
+
         return new Empty();
     }
 
@@ -27,7 +35,7 @@ public class DeviceGrpcServer : DeviceServiceBaseCommon
 
     public override async Task GetDevices(DeviceQueryMessage request, IServerStreamWriter<DeviceDto> responseStream, ServerCallContext context)
     {
-        await foreach(var device in _domainService.GetDevicesAsync(context.CancellationToken))
+        await foreach (var device in _domainService.GetDevicesAsync(context.CancellationToken))
         {
             await responseStream.WriteAsync(device.ToDto());
         }
@@ -44,6 +52,6 @@ public class DeviceGrpcServer : DeviceServiceBaseCommon
     // The following are defined becuase I use the "generate overrides"
     // function to fill out the generated stuff
     public override string? ToString() => base.ToString();
-    
+
     public override int GetHashCode() => base.GetHashCode();
 }

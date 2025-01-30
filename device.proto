@@ -6,6 +6,7 @@ package device;
 
 service DeviceService {
   rpc SetAliveState (DeviceStateMessage) returns (Empty);
+  rpc SetPosition (DevicePositionMessage) returns (Empty);
   rpc CreateDevice (DeviceCreateMessage) returns (Empty);
   rpc GetDevice (DeviceRequestMessage) returns (DeviceDto);
   rpc GetDevices (DeviceQueryMessage) returns (stream DeviceDto);
@@ -16,6 +17,8 @@ message DeviceDto {
   bool is_online = 2;
   google.protobuf.Timestamp last_state_change = 3;
   google.protobuf.Timestamp first_heard_from = 4;
+  float latitude = 5;
+  float longitude = 6;
 }
 
 message DeviceCreateMessage {
@@ -29,6 +32,12 @@ message DeviceRequestMessage {
 message DeviceStateMessage {
   string serial = 1;
   bool is_online = 2;
+}
+
+message DevicePositionMessage {
+  string serial = 1;
+  float latitude = 2;
+  float longitude = 3;
 }
 
 message DeviceQueryMessage { }
