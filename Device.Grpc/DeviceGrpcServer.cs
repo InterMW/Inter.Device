@@ -22,7 +22,8 @@ public class DeviceGrpcServer : DeviceServiceBaseCommon
 
     public override async Task<Empty> CreateDevice(DeviceCreateMessage request, ServerCallContext context)
     {
-        await _domainService.CreateDeviceAsync(request.Serial);
+        //await _domainService.CreateDeviceAsync(request.Serial);
+        await Task.CompletedTask;
 
         return new Empty();
     }

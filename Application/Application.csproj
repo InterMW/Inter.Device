@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <ItemGroup>
     <ProjectReference Include="..\Device.Grpc\Device.Grpc.csproj" />
@@ -16,6 +16,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <IsPackable>false</IsPackable>
+    <UserSecretsId>f712d5ad-4fed-471d-9c89-f86eb5ea796e</UserSecretsId>
   </PropertyGroup>
 
 </Project>

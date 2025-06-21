@@ -51,6 +51,7 @@ jobs:
         RABBIT_PASSWORD : ${{secrets.RABBIT_PASSWORD}}
         ONPREM_REDIS : ${{secrets.ONPREM_REDIS}}
         INFLUXDB_TOKEN : ${{secrets.INFLUXDB_TOKEN}}
+        IPAPIKEY: ${{secrets.IPAPIKEY}}
      - 
       name: Replace Appsettings
       run: cp ${{env.REPLACESETTINGS}} ${{env.APPSETTINGS}}

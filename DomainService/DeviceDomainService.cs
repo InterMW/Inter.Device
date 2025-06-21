@@ -13,23 +13,108 @@ public interface IDeviceDomainService
     IAsyncEnumerable<DeviceModel> GetDevicesAsync(CancellationToken ct);
     Task SetOnlineState(string serialNumber, bool state);
     Task CreateDeviceAsync(string serialNumber);
+    Task<int> RegisterDeviceAsync(string serialNumber, string ipAddress);
 }
 
-public class DeviceDomainService(
+public class DeviceDomainService : IDeviceDomainService
+{
+    private readonly IClock _clock;
+
+    private readonly IDeviceRepository _repository;
+
+    private readonly ILogger<DeviceDomainService> _logger;
+
+    private readonly IIpRepository _ipRepository;
+
+
+    public DeviceDomainService(
         IDeviceRepository repository,
         ILogger<DeviceDomainService> logger,
-        IClock clock) : IDeviceDomainService
-{
+        IIpRepository ipRepository,
+        IClock clock)
+    {
+        _logger = logger;
+        _repository = repository;
+        _clock = clock;
+        _ipRepository = ipRepository;
+    }
 
     public async Task SetPositionAsync(string serialNumber, float latitude, float longitude)
     {
         ValidateSerialNumber(serialNumber);
-        var device = await repository.GetDeviceAsync(serialNumber);
+        var device = await _repository.GetDeviceAsync(serialNumber);
 
         device.Latitude = latitude;
         device.Longitude = longitude;
 
-        await repository.SetDeviceAsync(device);
+        await _repository.SetDeviceAsync(device);
+    }
+
+    public async Task<int> RegisterDeviceAsync(string serialNumber, string ipAddress)
+    {
+        ValidateSerialNumber(serialNumber);
+        try
+        {
+            DeviceModel device;
+            if (await _repository.DeviceExists(serialNumber))
+            {
+                device = await _repository.GetDeviceAsync(serialNumber);
+            }
+            else
+            {
+                device = new()
+                {
+                    SerialNumber = serialNumber,
+                    IsOnline = true,
+                    FirstHeardFrom = _clock.GetUtcNow(),
+                    LastPowerChange = _clock.GetUtcNow(),
+                };
+
+                await _repository.CreateDeviceAsync(device);
+            }
+
+            if (device.IpAddress != ipAddress)
+            {
+                device.IpAddress = ipAddress;
+
+                var info = await _ipRepository.Lookup(ipAddress);
+
+                if (info is null)
+                {
+                    _logger.LogInformation("The ip address {ipAddress} for device {serialNumber} is somehow invalid");
+                    device.Latitude = 0;
+                    device.Longitude = 0;
+                }
+
+                device.Latitude = (float)info!.Latitude!;
+                device.Longitude = (float)info!.Longitude!;
+            }
+
+            if (device.Port == 0)
+            {
+                device.Port = await GetNextPort();
+            }
+
+            return device.Port;
+        }
+        catch (System.Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            throw new DeviceCannotBeCreatedException(serialNumber);
+        }
+    }
+
+    private async Task<int> GetNextPort()
+    {
+        var devices = _repository.GetDevicesAsync(CancellationToken.None);
+
+        int offset = 8000;
+        await foreach (var otherDevice in devices)
+        {
+            offset++;
+        }
+
+        return offset;
     }
 
     public async Task CreateDeviceAsync(string serialNumber)
@@ -37,21 +122,21 @@ public class DeviceDomainService(
         ValidateSerialNumber(serialNumber);
         try
         {
-            if(await repository.DeviceExists(serialNumber))
+            if (await _repository.DeviceExists(serialNumber))
             {
                 throw new System.Exception("Device already exists");
             }
 
-            await repository.CreateDeviceAsync(new DeviceModel() 
-            { 
+            await _repository.CreateDeviceAsync(new DeviceModel()
+            {
                 IsOnline = false,
                 SerialNumber = serialNumber,
-                LastPowerChange = clock.GetUtcNow()
+                LastPowerChange = _clock.GetUtcNow()
             });
         }
         catch (System.Exception ex)
         {
-            logger.LogError(ex.Message);
+            _logger.LogError(ex.Message);
             throw new DeviceCannotBeCreatedException(serialNumber);
         }
     }
@@ -59,36 +144,36 @@ public class DeviceDomainService(
     public Task<DeviceModel> GetDeviceAsync(string serialNumber)
     {
         ValidateSerialNumber(serialNumber);
-        return repository.GetDeviceAsync(serialNumber);
+        return _repository.GetDeviceAsync(serialNumber);
     }
 
     public IAsyncEnumerable<DeviceModel> GetDevicesAsync(CancellationToken ct) =>
-        repository.GetDevicesAsync(ct);
+        _repository.GetDevicesAsync(ct);
 
     public async Task SetOnlineState(string serialNumber, bool state)
     {
         ValidateSerialNumber(serialNumber);
 
-        var device = await repository.GetDeviceAsync(serialNumber);
+        var device = await _repository.GetDeviceAsync(serialNumber);
 
-        if(device.IsOnline != state)
+        if (device.IsOnline != state)
         {
             device.IsOnline = state;
-            device.LastPowerChange = clock.GetUtcNow();
+            device.LastPowerChange = _clock.GetUtcNow();
 
-            await repository.SetDeviceAsync(device);
+            await _repository.SetDeviceAsync(device);
 
-            logger.LogInformation("Device {_sn} is now {_state}.", serialNumber, state ? "online" : "offline");
+            _logger.LogInformation("Device {_sn} is now {_state}.", serialNumber, state ? "online" : "offline");
         }
         else
         {
-            logger.LogInformation("Device {_sn} was already {_state}.", serialNumber, state ? "online" : "offline");
+            _logger.LogInformation("Device {_sn} was already {_state}.", serialNumber, state ? "online" : "offline");
         }
     }
 
     private void ValidateSerialNumber(string serialNumber)
     {
-        if(serialNumber.Length != 12)
+        if (serialNumber.Length != 12)
         {
             throw new DeviceSerialNumberInvalidException(serialNumber);
         }
