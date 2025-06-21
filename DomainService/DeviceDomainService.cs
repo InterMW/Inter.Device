@@ -59,6 +59,7 @@ public class DeviceDomainService : IDeviceDomainService
             if (await _repository.DeviceExists(serialNumber))
             {
                 device = await _repository.GetDeviceAsync(serialNumber);
+                device.IsOnline = true;
             }
             else
             {
@@ -94,6 +95,8 @@ public class DeviceDomainService : IDeviceDomainService
             {
                 device.Port = await GetNextPort();
             }
+
+            await _repository.SetDeviceAsync(device);
 
             return device.Port;
         }
