@@ -17,6 +17,10 @@ public class AppRegistrator : Registrator
         services.AddSingleton<IClock, Clock>();
         services.AddSingleton<DeviceClient>();
 
+        services.AddSingleton<IIpRepository,IpRepository>();
+        services.AddOptions<IpOptions>()
+            .BindConfiguration(IpOptions.Section)
+            .ValidateDataAnnotations();
         services.AddOptions<MongoDBOptions>()
             .BindConfiguration(MongoDBOptions.Section)
             .ValidateDataAnnotations();

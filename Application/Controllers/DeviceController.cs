@@ -25,4 +25,9 @@ class DeviceController(IDeviceDomainService domainService)
                 .GetDevicesAsync(ct)
                 .Select(DeviceResponseMapper.ToResponse)
                 .ToArrayAsync();
+
+    [HttpPost]
+    [Route("register")]
+    public async Task<int> Register(DeviceRegistrationRequest request, CancellationToken ct) =>
+        await domainService.RegisterDeviceAsync(request.SerialNumber, request.IPAddress);
 }
