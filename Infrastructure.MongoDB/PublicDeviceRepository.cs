@@ -25,10 +25,10 @@ public class PublicDeviceRepository(DeviceClient client) : IDeviceRepository
 
     public async IAsyncEnumerable<DeviceModel> GetDevicesAsync(CancellationToken ct)
     {
-        foreach(var device in _standardCollection.AsQueryable())
+        foreach (var device in _standardCollection.AsQueryable())
         {
             await Task.CompletedTask;
-            if(ct.IsCancellationRequested)
+            if (ct.IsCancellationRequested)
                 yield break;
 
             yield return device.ToModel();
@@ -37,7 +37,7 @@ public class PublicDeviceRepository(DeviceClient client) : IDeviceRepository
 
     public Task SetDeviceAsync(DeviceModel model) =>
         _standardCollection
-        .ReplaceOneAsync(SerialNumberFilter(model.SerialNumber),model.ToDto());
+        .ReplaceOneAsync(SerialNumberFilter(model.SerialNumber), model.ToDto());
 
     private static FilterDefinition<PublicDeviceModel> SerialNumberFilter(string serialNumber) => Builders<PublicDeviceModel>.Filter.Eq(_ => _.SerialNumber, serialNumber);
 
@@ -46,10 +46,10 @@ public class PublicDeviceRepository(DeviceClient client) : IDeviceRepository
         return (await _standardCollection.FindAsync(SerialNumberFilter(serialNumber))).Any();
     }
 
-    private static ReplaceOptions options = new ()
-        {
-            BypassDocumentValidation = true
-        };
+    private static ReplaceOptions options = new()
+    {
+        BypassDocumentValidation = true
+    };
 }
 
 public static class PublicDeviceModelMapper
@@ -61,7 +61,8 @@ public static class PublicDeviceModelMapper
         FirstHeardFrom = model.FirstHeardFrom,
         LastPowerChange = model.LastPowerChange,
         Latitude = model.Latitude,
-        Longitude = model.Longitude
+        Longitude = model.Longitude,
+        IpAddress = model.IpAddress,
     };
 
     public static DeviceModel ToModel(this PublicDeviceModel model) => new()
@@ -71,18 +72,20 @@ public static class PublicDeviceModelMapper
         FirstHeardFrom = model.FirstHeardFrom,
         LastPowerChange = model.LastPowerChange,
         Latitude = model.Latitude,
-        Longitude = model.Longitude
+        Longitude = model.Longitude,
+        IpAddress = model.IpAddress
     };
 }
 
-public class PublicDeviceModel 
+public class PublicDeviceModel
 {
     [BsonIgnoreIfDefault]
     public ObjectId Id { get; set; }
     public string SerialNumber { get; set; } = "";
     public bool IsOnline { get; set; }
-    public DateTime FirstHeardFrom {get; set;} = DateTime.UtcNow;
-    public DateTime LastPowerChange {get; set;} = DateTime.MinValue;
-    public float Latitude {get; set;}
-    public float Longitude {get; set;}
+    public DateTime FirstHeardFrom { get; set; } = DateTime.UtcNow;
+    public DateTime LastPowerChange { get; set; } = DateTime.MinValue;
+    public float Latitude { get; set; }
+    public float Longitude { get; set; }
+    public string IpAddress { get; set; }
 }
