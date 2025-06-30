@@ -26,7 +26,6 @@ public class DeviceDomainService : IDeviceDomainService
 
     private readonly IIpRepository _ipRepository;
 
-
     public DeviceDomainService(
         IDeviceRepository repository,
         ILogger<DeviceDomainService> logger,
@@ -53,6 +52,7 @@ public class DeviceDomainService : IDeviceDomainService
     public async Task<int> RegisterDeviceAsync(string serialNumber, string ipAddress)
     {
         ValidateSerialNumber(serialNumber);
+        _logger.LogInformation("Registering {device} at {ip}", serialNumber, ipAddress);
         try
         {
             DeviceModel device;
@@ -97,6 +97,7 @@ public class DeviceDomainService : IDeviceDomainService
             }
 
             await _repository.SetDeviceAsync(device);
+            _logger.LogInformation("Registering {device} at {ip}:{port}", serialNumber, ipAddress, device.Port);
 
             return device.Port;
         }
@@ -114,10 +115,11 @@ public class DeviceDomainService : IDeviceDomainService
         int offset = 8000;
         await foreach (var otherDevice in devices)
         {
-            offset++;
+            offset = Math.Max(offset, otherDevice.Port);
+
         }
 
-        return offset;
+        return offset + 1;
     }
 
     public async Task CreateDeviceAsync(string serialNumber)

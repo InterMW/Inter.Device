@@ -63,6 +63,7 @@ public static class PublicDeviceModelMapper
         Latitude = model.Latitude,
         Longitude = model.Longitude,
         IpAddress = model.IpAddress,
+        Port = model.Port,
     };
 
     public static DeviceModel ToModel(this PublicDeviceModel model) => new()
@@ -73,7 +74,8 @@ public static class PublicDeviceModelMapper
         LastPowerChange = model.LastPowerChange,
         Latitude = model.Latitude,
         Longitude = model.Longitude,
-        IpAddress = model.IpAddress
+        IpAddress = model.IpAddress,
+        Port = model.Port,
     };
 }
 
@@ -81,11 +83,17 @@ public class PublicDeviceModel
 {
     [BsonIgnoreIfDefault]
     public ObjectId Id { get; set; }
+    [BsonRepresentation(BsonType.String, AllowTruncation=true)]
     public string SerialNumber { get; set; } = "";
     public bool IsOnline { get; set; }
     public DateTime FirstHeardFrom { get; set; } = DateTime.UtcNow;
     public DateTime LastPowerChange { get; set; } = DateTime.MinValue;
-    public float Latitude { get; set; }
-    public float Longitude { get; set; }
-    public string IpAddress { get; set; }
+    [BsonRepresentation(BsonType.Double, AllowTruncation=true)]
+    public float Latitude { get; set; } = 0;
+    [BsonRepresentation(BsonType.Double, AllowTruncation=true)]
+    public float Longitude { get; set; } = 0;
+    [BsonRepresentation(BsonType.String, AllowTruncation=true)]
+    public string IpAddress { get; set; } = "";
+    [BsonRepresentation(BsonType.Int32)]
+    public int Port { get; set; } 
 }
