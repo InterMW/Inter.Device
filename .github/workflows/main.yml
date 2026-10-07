@@ -27,6 +27,8 @@ jobs:
         replace: 8.0.${{ github.run_number }}</Version
     - name: Prepare
       run: mkdir output
+    - name: Pack 
+      run: dotnet pack -o output --configuration Release 
     - name: NuGet login (OIDC → temp API key)
       uses: NuGet/login@v1
       id: login
@@ -34,10 +36,6 @@ jobs:
         user: ${{ secrets.PACKAGE_OWNER }}
     - name: NuGet push
       run: dotnet nuget push **\*.nupkg --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
-    - name: Pack 
-      run: dotnet pack -o output --configuration Release 
-    - name: Push
-      run: dotnet nuget push **\*.nupkg -s 'https://api.nuget.org/v3/index.json' -k ${{secrets.NUGET_API_KEY}}
   build-publish:
     needs: push-package
     runs-on: ubuntu-latest
