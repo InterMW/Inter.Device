@@ -2,17 +2,20 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Device.Grpc\Device.Grpc.csproj" />
-    <ProjectReference Include="..\Infrastructure.Couchbase\Infrastructure.Couchbase.csproj" />
     <ProjectReference Include="..\Infrastructure.MongoDB\Infrastructure.MongoDB.csproj" />
+    <ProjectReference Include="..\Infrastructure.Rabbit\Infrastructure.Rabbit.csproj" />
+    <ProjectReference Include="..\Infrastructure.Mqtt\Infrastructure.Mqtt.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MelbergFramework.Application" Version="8.0.8" />
-    <PackageReference Include="MelbergFramework.Infrastructure.Couchbase" Version="8.0.10" />
+    <PackageReference Include="InterMW.Authorizer.GrpcClient" Version="10.0.21" />
+    <PackageReference Include="MelbergFramework.Application" Version="8.0.10" />
+    <PackageReference Include="MelbergFramework.Infrastructure.Rabbit" Version="8.0.15" />
+    <PackageReference Include="MQTTnet" Version="5.2.0.1603" />
   </ItemGroup>
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <IsPackable>false</IsPackable>

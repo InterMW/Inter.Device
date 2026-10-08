@@ -1,3 +1,4 @@
+using Authorizer.GrpcClient;
 using DomainService;
 using Infrastructure.MongoDB;
 using Infrastructure.RepositoryCore;
@@ -13,6 +14,8 @@ public class AppRegistrator : Registrator
     {
         services.AddTransient<IDeviceDomainService, DeviceDomainService>();
         services.AddTransient<IDeviceRepository,PublicDeviceRepository>();
+
+        AuthorizerGrpcDependencyModule.RegisterClient(services);
 
         services.AddSingleton<IClock, Clock>();
         services.AddSingleton<DeviceClient>();

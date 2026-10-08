@@ -6,7 +6,7 @@
     <ProjectReference Include="..\Device.GrpcCommon\Device.GrpcCommon.csproj" />
   </ItemGroup>
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>Device.GrpcClient</PackageId>
@@ -16,8 +16,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Grpc.AspNetCore" Version="2.63.0" />
-    <PackageReference Include="Grpc.StatusProto" Version="2.64.0" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.84.0" />
+    <PackageReference Include="Grpc.StatusProto" Version="2.84.0" />
   </ItemGroup>
 
 </Project>

@@ -1,13 +1,18 @@
 using Device.Common;
 using Device.Domain;
+using DomainService.MessageStrategies;
+using Infrastructure.Mqtt;
 using Infrastructure.RepositoryCore;
 using MelbergFramework.Core.Time;
 using Microsoft.Extensions.Logging;
+using MQTTnet;
 
 namespace DomainService;
 
 public interface IDeviceDomainService
 {
+    Task ConsumeMessage(string topic, string payload);
+    Task RestartDevice(string serialNumber);
     Task SetPositionAsync(string serialNumber, float latitude, float longitude);
     Task<DeviceModel> GetDeviceAsync(string serialNumber);
     IAsyncEnumerable<DeviceModel> GetDevicesAsync(CancellationToken ct);
@@ -26,18 +31,55 @@ public class DeviceDomainService : IDeviceDomainService
 
     private readonly IIpRepository _ipRepository;
 
+    private readonly IMqttProvider _provider;
+
+    private readonly IEnumerable<IMessageStrategy> _strategies;
 
     public DeviceDomainService(
+        IEnumerable<IMessageStrategy> strategies,
         IDeviceRepository repository,
         ILogger<DeviceDomainService> logger,
+        IMqttProvider provider,
         IIpRepository ipRepository,
         IClock clock)
     {
         _logger = logger;
         _repository = repository;
+        _provider = provider;
         _clock = clock;
         _ipRepository = ipRepository;
+        _strategies = strategies;
     }
+
+    public async Task ConsumeMessage(string topic, string payload)
+    {
+        var strategy = _strategies.FirstOrDefault(strat => strat.Topic == topic);
+
+        if (strategy is null)
+        {
+            //do something?
+            _logger.LogWarning("Unsupported message {topic} with payload {payload}", topic, payload);
+            return;
+        }
+
+        await strategy.HandleMessage(payload);
+    }
+    public async Task RestartDevice(string serialNumber)
+    {
+        var client = await _provider.GetClient();
+
+        var mess = new MqttApplicationMessageBuilder();
+        mess.WithPayload("restart");
+        mess.WithTopic("todevice/"+serialNumber);
+        await client.PublishAsync(mess.Build());
+        
+    }
+        //     var mess = new MqttApplicationMessageBuilder();
+        //             mess.WithPayload("restart");
+        //             mess.WithTopic("todevice/30EDA0E2549E");
+        //             var res = await mqttClient.PublishAsync(mess.Build());
+
+
 
     public async Task SetPositionAsync(string serialNumber, float latitude, float longitude)
     {

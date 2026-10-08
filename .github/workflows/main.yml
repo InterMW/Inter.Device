@@ -52,6 +52,9 @@ jobs:
         ONPREM_REDIS : ${{secrets.ONPREM_REDIS}}
         INFLUXDB_TOKEN : ${{secrets.INFLUXDB_TOKEN}}
         IPAPIKEY: ${{secrets.IPAPIKEY}}
+        MQTT_USER : ${{secrets.MQTT_USER}}
+        MQTT_PASS : ${{secrets.MQTT_PASS}}
+        MQTT_HOST : ${{secrets.MQTT_HOST}}
      - 
       name: Replace Appsettings
       run: cp ${{env.REPLACESETTINGS}} ${{env.APPSETTINGS}}

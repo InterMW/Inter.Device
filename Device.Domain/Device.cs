@@ -7,6 +7,7 @@ public class DeviceModel
     public int Port { get; set; } = 0;
     public bool IsOnline { get; set; } = false;
     public DateTime FirstHeardFrom { get; set; } = DateTime.UtcNow;
+    public DateTime LastHeardFrom { get; set; } = DateTime.UtcNow;
     public DateTime LastPowerChange { get; set; } = DateTime.MinValue;
     public float Latitude { get; set; }
     public float Longitude { get; set; }

@@ -2,8 +2,6 @@ using Application;
 using Device;
 using LightBDD.MsTest3;
 using MelbergFramework.Application;
-using MelbergFramework.ComponentTesting.Couchbase;
-using MelbergFramework.Core.ComponentTesting;
 using MelbergFramework.Core.DependencyInjection;
 using MelbergFramework.Core.Time;
 using Microsoft.AspNetCore.Builder;
@@ -19,8 +17,7 @@ public class BaseTestFrame : FeatureFixture
                 .CreateHost<AppRegistrator>()
                 .AddServices(_ => 
                 {
-                    _.OverrideWithSingleton<IClock,MockClock>();
-                    _.OverrideCouchbaseDatabase();
+//                    _.OverrideWithSingleton<IClock,MockClock>();
                 })
                 .AddControllers()
                 .Build();

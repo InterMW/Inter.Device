@@ -6,16 +6,19 @@
     <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\Device.Common\Device.Common.csproj" />
     <ProjectReference Include="..\Infrastructure.MongoDB\Infrastructure.MongoDB.csproj" />
+    <ProjectReference Include="..\Infrastructure.Rabbit\Infrastructure.Rabbit.csproj" />
+    <ProjectReference Include="..\Infrastructure.Mqtt\Infrastructure.Mqtt.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="IpData" Version="2.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
-    <PackageReference Include="MelbergFramework.Core" Version="8.0.8" />
+    <PackageReference Include="IpData" Version="3.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.12" />
+    <PackageReference Include="MelbergFramework.Core" Version="8.0.10" />
+    <PackageReference Include="MQTTnet" Version="5.2.0.1603" />
   </ItemGroup>
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>

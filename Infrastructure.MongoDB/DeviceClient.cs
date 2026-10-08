@@ -18,7 +18,7 @@ public class DeviceClient
         {
             _client.GetDatabase("device").CreateCollectionAsync("standard").Wait();
         }
-        catch (System.Exception)
+        catch (System.Exception ex)
         {
         }
         
