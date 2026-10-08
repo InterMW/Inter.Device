@@ -10,6 +10,7 @@ public static class DeviceResponseMapper
         IsOnline = model.IsOnline,
         SerialNumber = model.SerialNumber,
         FirstHeardFrom = model.FirstHeardFrom,
+        LastHeardFrom = model.LastHeardFrom,
         LastPowerChange = model.LastPowerChange
     };
 }

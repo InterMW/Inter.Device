@@ -25,20 +25,11 @@ public class DeviceController(
     [HttpGet]
     [InterAuthorizer]
     [Route("list")]
-    public async Task<DeviceResponse[]> GetDevices(CancellationToken ct) 
-    {
-        var j = await domainService
+    public async Task<DeviceResponse[]> GetDevices(CancellationToken ct)  =>
+        await domainService
                 .GetDevicesAsync(ct)
                 .Select(DeviceResponseMapper.ToResponse)
                 .ToArrayAsync();
-
-        foreach( var t in j)
-        {
-          Console.WriteLine(t.SerialNumber);
-        }
-
-        return j;
-    }
         //     var mess = new MqttApplicationMessageBuilder();
         //             mess.WithPayload("restart");
         //             mess.WithTopic("todevice/30EDA0E2549E");

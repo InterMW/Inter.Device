@@ -13,6 +13,9 @@ public class DeviceResponse
     [JsonPropertyName("firstHeardFrom")]
     public DateTime FirstHeardFrom {get; set;} = DateTime.UtcNow;
 
+    [JsonPropertyName("lastHeardFrom")]
+    public DateTime LastHeardFrom {get; set;} = DateTime.UtcNow;
+
     [JsonPropertyName("lastPowerChange")]
     public DateTime LastPowerChange {get; set;} = DateTime.MinValue;
 }
