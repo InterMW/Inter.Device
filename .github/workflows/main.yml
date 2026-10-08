@@ -7,6 +7,8 @@ on:
 
 jobs:
   push-package:
+    permissions:
+      id-token: write  # enable GitHub OIDC token issuance for this job
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -27,8 +29,13 @@ jobs:
       run: mkdir output
     - name: Pack 
       run: dotnet pack -o output --configuration Release 
-    - name: Push
-      run: dotnet nuget push **\*.nupkg -s 'https://api.nuget.org/v3/index.json' -k ${{secrets.NUGET_API_KEY}}
+    - name: NuGet login (OIDC → temp API key)
+      uses: NuGet/login@v1
+      id: login
+      with:
+        user: ${{ secrets.PACKAGE_OWNER }}
+    - name: NuGet push
+      run: dotnet nuget push **\*.nupkg --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
   build-publish:
     needs: push-package
     runs-on: ubuntu-latest
@@ -76,7 +83,7 @@ jobs:
               ${{secrets.DOCKER_HOST}}/${{env.TAG}}
   deploy:
     needs: build-publish
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env:
       TAG: interdevice
     steps:
