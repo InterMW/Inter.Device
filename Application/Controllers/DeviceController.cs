@@ -15,11 +15,11 @@ public class DeviceController(
     [HttpPost]
     [InterAuthorizer]
     [Route("restart/{serial}")]
-    public async Task<DeviceResponse> GetDevice([FromRoute] string serial)
+    public async Task<bool> GetDevice([FromRoute] string serial)
     {
         Console.WriteLine("Restarting ");
-        var device = await domainService.GetDeviceAsync(serial);
-        return device.ToResponse();
+        await domainService.RestartDevice(serial);
+        return true;
     }
 
     [HttpGet]
