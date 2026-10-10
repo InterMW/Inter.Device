@@ -41,7 +41,7 @@ builder.Services.AddOptions<MongoDBOptions>()
                 .BindConfiguration(MongoDBOptions.Section)
                 .ValidateDataAnnotations();
 
-builder.Services.AddTransient<IMqttProvider , MqttProvider>();
+builder.Services.AddSingleton<IMqttProvider , MqttProvider>();
 
 builder.Services.AddTransient<IMessageStrategy, PlaneMessageStrategy>();
 builder.Services.AddTransient<IMessageStrategy, LifeMessageStrategy>();
