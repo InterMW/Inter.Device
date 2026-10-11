@@ -42,7 +42,7 @@ builder.Services.AddOptions<MongoDBOptions>()
                 .ValidateDataAnnotations();
 
 builder.Services.AddSingleton<IMqttProvider , MqttProvider>();
-
+builder.Services.AddSingleton<IIpRepository,IpRepository>();
 builder.Services.AddTransient<IMessageStrategy, PlaneMessageStrategy>();
 builder.Services.AddTransient<IMessageStrategy, LifeMessageStrategy>();
 builder.Services.AddTransient<IMessageStrategy, CheckInStrategy>();

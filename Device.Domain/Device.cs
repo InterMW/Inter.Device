@@ -11,4 +11,5 @@ public class DeviceModel
     public DateTime LastPowerChange { get; set; } = DateTime.MinValue;
     public float Latitude { get; set; }
     public float Longitude { get; set; }
+    public int Temperature { get; set; } = 0;
 }
