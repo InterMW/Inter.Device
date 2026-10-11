@@ -11,6 +11,8 @@ public static class DeviceResponseMapper
         SerialNumber = model.SerialNumber,
         FirstHeardFrom = model.FirstHeardFrom,
         LastHeardFrom = model.LastHeardFrom,
-        LastPowerChange = model.LastPowerChange
+        LastPowerChange = model.LastPowerChange,
+        Latitude = model.Latitude,
+        Longitude = model.Longitude,
     };
 }

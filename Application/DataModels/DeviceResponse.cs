@@ -18,4 +18,10 @@ public class DeviceResponse
 
     [JsonPropertyName("lastPowerChange")]
     public DateTime LastPowerChange {get; set;} = DateTime.MinValue;
+
+    [JsonPropertyName("latitude")]
+    public float Latitude {get; set;} = 0;
+
+    [JsonPropertyName("longitude")]
+    public float Longitude {get; set;} = 0;
 }
