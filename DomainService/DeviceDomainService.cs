@@ -64,6 +64,7 @@ public class DeviceDomainService : IDeviceDomainService
 
         await strategy.HandleMessage(payload);
     }
+
     public async Task RestartDevice(string serialNumber)
     {
         var client = await _provider.GetClient();

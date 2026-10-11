@@ -10,6 +10,7 @@ public class InfoMessageStrategy(IDeviceRepository deviceRepository, IIpReposito
 
     public async Task HandleMessage(string payload)
     {
+        Console.WriteLine(payload);
         bool didChange = false;
         var parts = payload.Split(':');
 

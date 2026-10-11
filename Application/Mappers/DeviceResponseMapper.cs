@@ -14,5 +14,6 @@ public static class DeviceResponseMapper
         LastPowerChange = model.LastPowerChange,
         Latitude = model.Latitude,
         Longitude = model.Longitude,
+        IpAddress = model.IpAddress,
     };
 }
