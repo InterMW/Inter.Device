@@ -9,6 +9,7 @@ public class LifeMessageStrategy(IDeviceRepository deviceRepository) : IMessageS
 
     public async Task HandleMessage(string payload)
     {
+        Console.WriteLine($"Got Alive from {payload} @ {DateTime.UtcNow}");
         if (!await deviceRepository.DeviceExists(payload))
         {
             await CreateNewDevice(payload);
