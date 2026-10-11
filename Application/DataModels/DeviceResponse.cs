@@ -24,4 +24,7 @@ public class DeviceResponse
 
     [JsonPropertyName("longitude")]
     public float Longitude {get; set;} = 0;
+
+    [JsonPropertyName("ipAddress")]
+    public string IpAddress {get; set;} = "";
 }
