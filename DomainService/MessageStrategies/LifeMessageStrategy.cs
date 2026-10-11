@@ -16,7 +16,7 @@ public class LifeMessageStrategy(IDeviceRepository deviceRepository) : IMessageS
         }
         else
         {
-          await UpdateDevice(payload);
+            await UpdateDevice(payload);
         }
     }
 

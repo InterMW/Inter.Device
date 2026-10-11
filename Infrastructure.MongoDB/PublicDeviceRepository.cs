@@ -63,6 +63,7 @@ public static class PublicDeviceModelMapper
         Latitude = model.Latitude,
         Longitude = model.Longitude,
         IpAddress = model.IpAddress,
+        LastHeardFrom = model.LastHeardFrom,
     };
 
     public static DeviceModel ToModel(this PublicDeviceModel model) => new()
@@ -73,7 +74,8 @@ public static class PublicDeviceModelMapper
         LastPowerChange = model.LastPowerChange,
         Latitude = model.Latitude,
         Longitude = model.Longitude,
-        IpAddress = model.IpAddress
+        IpAddress = model.IpAddress,
+        LastHeardFrom = model.LastHeardFrom,
     };
 }
 
@@ -85,6 +87,7 @@ public class PublicDeviceModel
     public bool IsOnline { get; set; }
     public DateTime FirstHeardFrom { get; set; } = DateTime.UtcNow;
     public DateTime LastPowerChange { get; set; } = DateTime.MinValue;
+    public DateTime LastHeardFrom { get; set; } = DateTime.UtcNow;
     public float Latitude { get; set; }
     public float Longitude { get; set; }
     public string IpAddress { get; set; }

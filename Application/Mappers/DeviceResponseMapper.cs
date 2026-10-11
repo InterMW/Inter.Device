@@ -5,7 +5,10 @@ namespace Application.Mappers;
 
 public static class DeviceResponseMapper
 {
-    public static DeviceResponse ToResponse(this DeviceModel model) => new()
+    public static DeviceResponse ToResponse(this DeviceModel model) 
+    {
+      Console.WriteLine($"{model.SerialNumber} at {model.LastHeardFrom}");
+      return new()
     {
         IsOnline = model.IsOnline,
         SerialNumber = model.SerialNumber,
@@ -16,4 +19,5 @@ public static class DeviceResponseMapper
         Longitude = model.Longitude,
         IpAddress = model.IpAddress,
     };
+    }
 }
